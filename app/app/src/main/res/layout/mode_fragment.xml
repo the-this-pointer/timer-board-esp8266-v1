@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:circlesButton="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    tools:context=".ui.mode.ModeFragment"
+    android:background="#88FFFFFF"
+    android:clickable="true">
+
+    <com.polyak.iconswitch.IconSwitch
+                android:id="@+id/mode_switch"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                app:isw_icon_size="70dp"
+                app:isw_default_selection="left"
+                app:isw_icon_left="@drawable/ic_stop_100"
+                app:isw_icon_right="@drawable/ic_play_100"
+                app:isw_thumb_color_left="@color/colorAccent"
+                app:isw_thumb_color_right="@color/colorPrimary" />
+
+
+</LinearLayout>

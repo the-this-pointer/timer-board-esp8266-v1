@@ -1,0 +1,34 @@
+<resources>
+    <string-array name="time_table_titles">
+        <item></item>
+        <item>Sat</item>
+        <item>Sun</item>
+        <item>Mon</item>
+        <item>Tue</item>
+        <item>Wed</item>
+        <item>Thu</item>
+        <item>Fri</item>
+    </string-array>
+
+    <string-array name="week_days">
+        <item>Saturday</item>
+        <item>Sunday</item>
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+    </string-array>
+
+    <string name="app_name">Scheduler</string>
+    <string name="menu_disconnect">Disconnect</string>
+    <string name="menu_add">Add</string>
+    <string name="menu_connect">Connect</string>
+    <string name="menu_set_time">Set Time</string>
+    <string name="menu_set_ssid">Set SSID</string>
+    <string name="menu_set_password">Set Password</string>
+    <string name="menu_load_data">Load Data</string>
+    <string name="add_time">Add time</string>
+    <string name="picker_time_default">Select</string>
+
+</resources>

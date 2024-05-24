@@ -1,0 +1,10 @@
+NodeMCU 3.0.0.0 built on nodemcu-build.com provided by frightanic.com
+	branch: master
+	commit: 71a182caa7841cbb478ed90ede526dc881943c80
+	release: 
+	release DTS: 202001061321
+	SSL: false
+	build type: integer
+	LFS: 0x0
+	modules: encoder,file,gpio,i2c,net,node,sjson,tmr,uart,wifi
+ build 2020-01-25 20:17 powered by Lua 5.1.4 on SDK 3.0.1-dev(fce080e)

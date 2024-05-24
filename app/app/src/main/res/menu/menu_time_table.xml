@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/menu_connect" android:title="@string/menu_connect"
+        android:icon="@drawable/ic_action_cast_connected"
+        app:showAsAction="always|withText"/>
+
+    <item android:id="@+id/menu_add" android:title="@string/menu_add"
+        android:icon="@drawable/ic_action_add_alarm"
+        app:showAsAction="always|withText"/>
+
+    <item android:id="@+id/menu_disconnect" android:title="@string/menu_disconnect"
+        android:icon="@drawable/ic_action_power_settings_new"
+        app:showAsAction="always|withText"/>
+
+    <item android:id="@+id/menu_load_data" android:title="@string/menu_load_data"
+        android:icon="@drawable/ic_action_file_download"
+        app:showAsAction="never"/>
+
+    <item android:id="@+id/menu_set_time" android:title="@string/menu_set_time"
+        android:icon="@drawable/ic_action_access_time"
+        app:showAsAction="never"/>
+
+    <item android:id="@+id/menu_set_ssid" android:title="@string/menu_set_ssid"
+        android:icon="@drawable/ic_action_access_time"
+        app:showAsAction="never"/>
+
+    <item android:id="@+id/menu_set_password" android:title="@string/menu_set_password"
+        android:icon="@drawable/ic_action_access_time"
+        app:showAsAction="never"/>
+
+</menu>
