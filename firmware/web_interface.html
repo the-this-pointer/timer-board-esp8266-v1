@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timer Control</title>
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* Card Styles */
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .card-header {
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        /* Button Styles */
+        .btn {
+            display: inline-block;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
+
+        .btn-warning {
+            background-color: #ffc107;
+            color: #212529;
+        }
+
+        .btn-warning:hover {
+            background-color: #e0a800;
+        }
+
+        /* Form Controls */
+        .form-control {
+            display: block;
+            width: 100%;
+            padding: 8px;
+            font-size: 14px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+        }
+
+        /* Time Input Styles */
+        .time-input {
+            width: 60px;
+            display: inline-block;
+        }
+
+        /* Day Card Styles */
+        .day-card {
+            margin-bottom: 1rem;
+        }
+
+        /* Active/Inactive Indicators */
+        .active-indicator {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        .active {
+            background-color: #28a745;
+        }
+
+        .inactive {
+            background-color: #dc3545;
+        }
+
+        /* Priority Badge */
+        .priority-badge {
+            font-size: 0.8em;
+            margin-left: 10px;
+            padding: 3px 6px;
+            border-radius: 4px;
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .bg-primary {
+            background-color: #007bff !important;
+        }
+
+        .bg-secondary {
+            background-color: #6c757d !important;
+        }
+
+        /* Button Group */
+        .button-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* Grid System */
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0 -15px;
+        }
+
+        .col-md-6 {
+            flex: 0 0 50%;
+            max-width: 50%;
+            padding: 0 15px;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 {
+            margin-bottom: 0.5rem;
+        }
+
+        .h4 {
+            font-size: 1.5rem;
+        }
+
+        .mb-0 {
+            margin-bottom: 0 !important;
+        }
+
+        .mb-3 {
+            margin-bottom: 1rem !important;
+        }
+
+        .mb-4 {
+            margin-bottom: 1.5rem !important;
+        }
+
+        .mt-3 {
+            margin-top: 1rem !important;
+        }
+
+        .mt-4 {
+            margin-top: 1.5rem !important;
+        }
+
+        /* Badge */
+        .badge {
+            display: inline-block;
+            padding: 0.25em 0.4em;
+            font-size: 75%;
+            font-weight: 700;
+            line-height: 1;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: baseline;
+            border-radius: 0.25rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .col-md-6 {
+                flex: 0 0 100%;
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="mb-4">Timer Control</h1>
+        
+        <!-- Connection Status -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Connection Status</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div id="connectionStatus" class="active-indicator active"></div>
+                    <span id="connectionText">Connected</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- WiFi Configuration -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">WiFi Configuration</h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label>SSID</label>
+                        <input type="text" class="form-control" id="wifiSsid" placeholder="Enter SSID">
+                    </div>
+                    <div class="col-md-6">
+                        <label>Password</label>
+                        <input type="password" class="form-control" id="wifiPassword" placeholder="Enter Password">
+                    </div>
+                </div>
+                <button id="saveWifiConfig" class="btn btn-primary">Save WiFi Configuration</button>
+                <div class="alert alert-warning mt-3">
+                    <strong>Note:</strong> The device will restart after updating WiFi settings.
+                </div>
+            </div>
+        </div>
+
+        <!-- Current Time -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Current Time</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>Device Time:</h6>
+                        <div id="currentTime" class="h4 mb-3">--:--:--</div>
+                        <div id="currentDate" class="h4 mb-3">--/--</div>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>System Time:</h6>
+                        <div id="systemTime" class="h4 mb-3">--:--:--</div>
+                        <div id="systemDate" class="h4 mb-3">--/--</div>
+                    </div>
+                </div>
+                <button id="syncTime" class="btn btn-primary">Sync with Device</button>
+            </div>
+        </div>
+
+        <!-- Daily Schedules -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Schedules</h5>
+            </div>
+            <div class="card-body">
+                <div id="scheduleContainer">
+                    <!-- Schedule cards will be dynamically added here -->
+                </div>
+                <button id="addDay" class="btn btn-success mt-3">Add New Schedule</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Day Schedule Template -->
+    <template id="dayTemplate">
+        <div class="card day-card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Schedule <span class="day-number"></span></h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-12 mb-3">
+                        <label>Schedule Type</label>
+                        <select class="form-control schedule-type">
+                            <option value="daily">Daily</option>
+                            <option value="weekly">Weekly</option>
+                            <option value="monthly">Monthly</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label>Start Time</label>
+                        <div>
+                            <select class="form-control mb-2 start-day" style="display: none;">
+                                <option value="0">Sunday</option>
+                                <option value="1">Monday</option>
+                                <option value="2">Tuesday</option>
+                                <option value="3">Wednesday</option>
+                                <option value="4">Thursday</option>
+                                <option value="5">Friday</option>
+                                <option value="6">Saturday</option>
+                            </select>
+                            <select class="form-control mb-2 start-month-day" style="display: none;">
+                                <option value="1">1st</option>
+                                <option value="2">2nd</option>
+                                <option value="3">3rd</option>
+                                <option value="4">4th</option>
+                                <option value="5">5th</option>
+                                <option value="6">6th</option>
+                                <option value="7">7th</option>
+                                <option value="8">8th</option>
+                                <option value="9">9th</option>
+                                <option value="10">10th</option>
+                                <option value="11">11th</option>
+                                <option value="12">12th</option>
+                                <option value="13">13th</option>
+                                <option value="14">14th</option>
+                                <option value="15">15th</option>
+                                <option value="16">16th</option>
+                                <option value="17">17th</option>
+                                <option value="18">18th</option>
+                                <option value="19">19th</option>
+                                <option value="20">20th</option>
+                                <option value="21">21st</option>
+                                <option value="22">22nd</option>
+                                <option value="23">23rd</option>
+                                <option value="24">24th</option>
+                                <option value="25">25th</option>
+                                <option value="26">26th</option>
+                                <option value="27">27th</option>
+                                <option value="28">28th</option>
+                                <option value="29">29th</option>
+                                <option value="30">30th</option>
+                                <option value="31">31st</option>
+                            </select>
+                            <input type="number" class="form-control time-input start-hour" min="0" max="23" placeholder="HH" value="8">
+                            <span>:</span>
+                            <input type="number" class="form-control time-input start-minute" min="0" max="59" placeholder="MM" value="0">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label>End Time</label>
+                        <div>
+                            <select class="form-control mb-2 end-day" style="display: none;">
+                                <option value="0">Sunday</option>
+                                <option value="1">Monday</option>
+                                <option value="2">Tuesday</option>
+                                <option value="3">Wednesday</option>
+                                <option value="4">Thursday</option>
+                                <option value="5">Friday</option>
+                                <option value="6">Saturday</option>
+                            </select>
+                            <select class="form-control mb-2 end-month-day" style="display: none;">
+                                <option value="1">1st</option>
+                                <option value="2">2nd</option>
+                                <option value="3">3rd</option>
+                                <option value="4">4th</option>
+                                <option value="5">5th</option>
+                                <option value="6">6th</option>
+                                <option value="7">7th</option>
+                                <option value="8">8th</option>
+                                <option value="9">9th</option>
+                                <option value="10">10th</option>
+                                <option value="11">11th</option>
+                                <option value="12">12th</option>
+                                <option value="13">13th</option>
+                                <option value="14">14th</option>
+                                <option value="15">15th</option>
+                                <option value="16">16th</option>
+                                <option value="17">17th</option>
+                                <option value="18">18th</option>
+                                <option value="19">19th</option>
+                                <option value="20">20th</option>
+                                <option value="21">21st</option>
+                                <option value="22">22nd</option>
+                                <option value="23">23rd</option>
+                                <option value="24">24th</option>
+                                <option value="25">25th</option>
+                                <option value="26">26th</option>
+                                <option value="27">27th</option>
+                                <option value="28">28th</option>
+                                <option value="29">29th</option>
+                                <option value="30">30th</option>
+                                <option value="31">31st</option>
+                            </select>
+                            <input type="number" class="form-control time-input end-hour" min="0" max="23" placeholder="HH" value="17">
+                            <span>:</span>
+                            <input type="number" class="form-control time-input end-minute" min="0" max="59" placeholder="MM" value="0">
+                        </div>
+                    </div>
+                </div>
+                <div class="button-group">
+                    <button class="btn btn-primary save-day">Save Schedule</button>
+                    <button class="btn btn-warning unset-day">Unset Schedule</button>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <script>
+        const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        let currentSchedule = null;
+
+        async function apiRequest(endpoint, method = 'GET', data = null) {
+            try {
+                const options = {
+                    method,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                };
+                
+                if (data) {
+                    options.body = JSON.stringify(data);
+                }
+
+                const response = await fetch(`/api/${endpoint}`, options);
+                const result = await response.json();
+                
+                if (!result.s) {
+                    console.error('Error:', result.m);
+                    return null;
+                }
+                
+                return result.m;
+            } catch (error) {
+                console.error('Network error:', error);
+                return null;
+            }
+        }
+
+        function updateScheduleTypeUI(card) {
+            const type = card.querySelector('.schedule-type').value;
+            const startDay = card.querySelector('.start-day');
+            const endDay = card.querySelector('.end-day');
+            const startMonthDay = card.querySelector('.start-month-day');
+            const endMonthDay = card.querySelector('.end-month-day');
+
+            // Hide all selectors first
+            startDay.style.display = 'none';
+            endDay.style.display = 'none';
+            startMonthDay.style.display = 'none';
+            endMonthDay.style.display = 'none';
+
+            // Show relevant selectors based on schedule type
+            if (type === 'weekly') {
+                startDay.style.display = 'block';
+                endDay.style.display = 'block';
+            } else if (type === 'monthly') {
+                startMonthDay.style.display = 'block';
+                endMonthDay.style.display = 'block';
+            }
+        }
+
+        async function loadSchedule() {
+            const schedule = await apiRequest('get_schedule');
+            if (schedule) {
+                currentSchedule = schedule;
+                renderSchedule();
+            }
+        }
+
+        async function getTime() {
+            const time = await apiRequest('get_time');
+            if (time) {
+                const timeStr = `${time.h.toString().padStart(2, '0')}:${time.m.toString().padStart(2, '0')}:${time.s.toString().padStart(2, '0')}`;
+                const dateStr = `${time.d.toString().padStart(2, '0')}/${time.mo.toString().padStart(2, '0')}`;
+                document.getElementById('currentTime').textContent = timeStr;
+                document.getElementById('currentDate').textContent = dateStr;
+            }
+        }
+
+        function updateSystemTime() {
+            const now = new Date();
+            const timeStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}`;
+            const dateStr = `${now.getDate().toString().padStart(2, '0')}/${(now.getMonth() + 1).toString().padStart(2, '0')}`;
+            document.getElementById('systemTime').textContent = timeStr;
+            document.getElementById('systemDate').textContent = dateStr;
+        }
+
+        function renderSchedule() {
+            const container = document.getElementById('scheduleContainer');
+            container.innerHTML = '';
+
+            if (currentSchedule && currentSchedule.t) {
+                currentSchedule.t.forEach(schedule => {
+                    const template = document.getElementById('dayTemplate').content.cloneNode(true);
+                    const card = template.querySelector('.day-card');
+                    
+                    // Store the ID in the card for reference
+                    card.dataset.id = schedule.id;
+                    
+                    card.querySelector('.day-number').textContent = DAYS[schedule.d];
+                    card.querySelector('.schedule-type').value = schedule.type || 'daily';
+                    card.querySelector('.start-day').value = schedule.st.w;
+                    card.querySelector('.start-month-day').value = schedule.st.d;
+                    card.querySelector('.start-hour').value = schedule.st.h;
+                    card.querySelector('.start-minute').value = schedule.st.m;
+                    card.querySelector('.end-day').value = schedule.et.w;
+                    card.querySelector('.end-month-day').value = schedule.et.d;
+                    card.querySelector('.end-hour').value = schedule.et.h;
+                    card.querySelector('.end-minute').value = schedule.et.m;
+
+                    card.querySelector('.schedule-type').addEventListener('change', () => updateScheduleTypeUI(card));
+                    card.querySelector('.save-day').onclick = () => saveDaySchedule(schedule.id, card);
+                    card.querySelector('.unset-day').onclick = () => unsetDay(schedule.id);
+
+                    updateScheduleTypeUI(card);
+                    container.appendChild(card);
+                });
+            }
+        }
+
+        async function saveDaySchedule(id, card) {
+            const type = card.querySelector('.schedule-type').value;
+            const schedule = {
+                id: id,
+                d: 0, // Will be set based on type
+                type: type,
+                st: {
+                    h: parseInt(card.querySelector('.start-hour').value),
+                    m: parseInt(card.querySelector('.start-minute').value),
+                    w: 0,
+                    d: 0
+                },
+                et: {
+                    h: parseInt(card.querySelector('.end-hour').value),
+                    m: parseInt(card.querySelector('.end-minute').value),
+                    w: 0,
+                    d: 0
+                }
+            };
+
+            if (type === 'weekly') {
+                schedule.d = parseInt(card.querySelector('.start-day').value);
+                schedule.st.w = parseInt(card.querySelector('.start-day').value);
+                schedule.et.w = parseInt(card.querySelector('.end-day').value);
+            } else if (type === 'monthly') {
+                schedule.d = parseInt(card.querySelector('.start-month-day').value);
+                schedule.st.d = parseInt(card.querySelector('.start-month-day').value);
+                schedule.et.d = parseInt(card.querySelector('.end-month-day').value);
+            }
+
+            const result = await apiRequest('set_day', 'POST', schedule);
+            if (result) {
+                loadSchedule();
+            }
+        }
+
+        async function unsetDay(id) {
+            const schedule = {
+                id: id,
+                st: { w: 0, h: 0, m: 0, d: 0 },
+                et: { w: 0, h: 0, m: 0, d: 0 }
+            };
+
+            const result = await apiRequest('set_day', 'POST', schedule);
+            if (result) {
+                loadSchedule();
+            }
+        }
+
+        document.getElementById('addDay').onclick = () => {
+            const template = document.getElementById('dayTemplate').content.cloneNode(true);
+            const card = template.querySelector('.day-card');
+            
+            // Generate a new ID for the schedule
+            const id = Date.now().toString() + Math.floor(Math.random() * 1000);
+            card.dataset.id = id;
+            
+            card.querySelector('.schedule-type').addEventListener('change', () => updateScheduleTypeUI(card));
+            card.querySelector('.save-day').onclick = () => saveDaySchedule(id, card);
+            card.querySelector('.unset-day').onclick = () => unsetDay(id);
+
+            document.getElementById('scheduleContainer').appendChild(card);
+        };
+
+        document.getElementById('syncTime').onclick = async () => {
+            const now = new Date();
+            const result = await apiRequest('set_time', 'POST', {
+                h: now.getHours(),
+                m: now.getMinutes(),
+                w: now.getDay(),
+                d: now.getDate(),
+                mo: now.getMonth() + 1
+            });
+            if (result) {
+                getTime();
+            }
+        };
+
+        // Add WiFi configuration handlers
+        document.getElementById('saveWifiConfig').onclick = async () => {
+            const ssid = document.getElementById('wifiSsid').value;
+            const password = document.getElementById('wifiPassword').value;
+
+            if (!ssid || !password) {
+                alert('Please enter both SSID and password');
+                return;
+            }
+
+            try {
+                const result = await apiRequest('set_wifi', 'POST', {
+                    ssid: ssid,
+                    pass: password
+                });
+                
+                if (result) {
+                    alert('WiFi configuration updated successfully. Device will restart.');
+                } else {
+                    throw new Error('Failed to update WiFi configuration');
+                }
+            } catch (error) {
+                console.error('Error updating WiFi configuration:', error);
+                alert('Failed to update WiFi configuration: ' + error.message);
+            }
+        };
+
+        async function checkConnection() {
+            const statusIndicator = document.getElementById('connectionStatus');
+            const statusText = document.getElementById('connectionText');
+            
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+                
+                const response = await fetch('/api/ping', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({}),
+                    signal: controller.signal
+                });
+                
+                clearTimeout(timeoutId);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                const isConnected = result.s;
+                
+                if (isConnected) {
+                    statusIndicator.classList.remove('inactive');
+                    statusIndicator.classList.add('active');
+                    statusText.textContent = 'Connected';
+                } else {
+                    statusIndicator.classList.remove('active');
+                    statusIndicator.classList.add('inactive');
+                    statusText.textContent = 'Disconnected';
+                }
+            } catch (error) {
+                // Handle timeout, network errors, or invalid responses
+                console.error('Connection check failed:', error);
+                statusIndicator.classList.remove('active');
+                statusIndicator.classList.add('inactive');
+                statusText.textContent = 'Disconnected';
+            }
+        }
+
+        // Initialize
+        loadSchedule();
+        getTime();
+        checkConnection(); // Initial connection check
+        setInterval(getTime, 10000);
+        setInterval(checkConnection, 20000); // Check connection every 20 seconds
+        setInterval(updateSystemTime, 5000);
+    </script>
+</body>
+</html> 

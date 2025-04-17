@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <declare-styleable name="week_day_picker">
-        <attr name="week_day_picker_caption" format="string" />
-    </declare-styleable>
-    <declare-styleable name="time_picker">
-        <attr name="time_picker_caption" format="string" />
-    </declare-styleable>
-</resources>

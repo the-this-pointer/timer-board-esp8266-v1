@@ -10,22 +10,19 @@ uart.on("data", "\r", function(data)
     if succ then
         if jsonData.action == nil then return end
         local action = jsonData.action
-        if action == 'time' then
-            --local tm = rtctime.epoch2cal(1582284539)
-            --uart.write(0, string.format("%04d/%02d/%02d %02d:%02d:%02d", tm["year"], tm["mon"], tm["day"], tm["hour"], tm["min"], tm["sec"]))
-        elseif action == 'wifi_off' then
+        if action == 'wifi_off' then
             wifi.setmode(wifi.NULLMODE)
             uart.write(0, "ok;")
         elseif action == 'wifi_on' then
             if not dofile(loader)('config') then 
                 uart.write(0, "err;")
                 node.restart() 
-            end
-            if not dofile(loader)('server') then 
+            elseif not dofile(loader)('server') then 
                 uart.write(0, "err;")
                 node.restart() 
+            else
+                uart.write(0, "ok;")
             end
-            uart.write(0, "ok;")
         elseif action == 'quit' then
             uart.on("data")
             uart.write(0, "ok;")

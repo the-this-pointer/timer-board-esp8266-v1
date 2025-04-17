@@ -1,0 +1,116 @@
+API Documentation for Timer Board Control
+
+Endpoints:
+----------
+
+1. GET /api/get_schedule
+   Description: Get current schedule configuration
+   Response: {
+     "a": "get_schedule",
+     "s": true,
+     "m": {
+       "t": [
+         {
+           "id": "unique_id",
+           "d": day_number,
+           "type": "daily|weekly|monthly",
+           "st": {
+             "h": start_hour,
+             "m": start_minute,
+             "w": start_weekday,  // for weekly schedules
+             "d": start_day       // for monthly schedules
+           },
+           "et": {
+             "h": end_hour,
+             "m": end_minute,
+             "w": end_weekday,    // for weekly schedules
+             "d": end_day         // for monthly schedules
+           }
+         }
+       ]
+     }
+   }
+
+2. POST /api/set_day
+   Description: Set or update a schedule
+   Request: {
+     "id": "unique_id",          // Optional for new schedules
+     "d": day_number,            // Day number (0-6 for weekly, 1-31 for monthly)
+     "type": "daily|weekly|monthly",
+     "st": {
+       "h": start_hour,          // 0-23
+       "m": start_minute,        // 0-59
+       "w": start_weekday,       // 0-6 for weekly schedules
+       "d": start_day           // 1-31 for monthly schedules
+     },
+     "et": {
+       "h": end_hour,            // 0-23
+       "m": end_minute,          // 0-59
+       "w": end_weekday,         // 0-6 for weekly schedules
+       "d": end_day             // 1-31 for monthly schedules
+     }
+   }
+   Note: To unset a schedule, send all time components as 0
+
+3. GET /api/get_time
+   Description: Get current device time
+   Response: {
+     "a": "get_time",
+     "s": true,
+     "m": {
+       "s": seconds,             // 0-59
+       "m": minutes,             // 0-59
+       "h": hours,               // 0-23
+       "w": weekday,             // 0-6
+       "d": day,                 // 1-31
+       "mo": month,              // 1-12
+       "y": year                 // 1-99
+     }
+   }
+
+4. POST /api/set_time
+   Description: Set device time
+   Request: {
+     "h": hours,                 // 0-23
+     "m": minutes,               // 0-59
+     "w": weekday,               // 0-6
+     "d": day,                   // 1-31
+     "mo": month                 // 1-12
+   }
+
+5. POST /api/ping
+   Description: Check server connectivity
+   Request: {}
+   Response: {
+     "a": "pong",
+     "s": true,
+     "m": "Pong!"
+   }
+
+The below requests are now removed from api and the set_wifi service is added
+6. POST /api/set_pass
+   Description: Update device password
+   Request: {
+     "p": "new_password"
+   }
+
+7. POST /api/set_ssid
+   Description: Update device SSID
+   Request: {
+     "p": "new_ssid"
+   }
+
+Error Responses:
+--------------
+All endpoints return error responses in the format:
+{
+  "a": "error",
+  "s": false,
+  "m": "error_message"
+}
+
+Common error messages:
+- "Invalid JSON" - When request body is not valid JSON
+- "Unknown action" - When endpoint does not exist
+- "Failed to save schedule" - When schedule update fails
+- "Failed to save mock time" - When mock time update fails 
