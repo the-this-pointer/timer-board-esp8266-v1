@@ -232,7 +232,7 @@ local function initServer()
                                 s = tonumber(string.format("%X",string.byte(c, 1))),
                                 m = tonumber(string.format("%X",string.byte(c, 2))),
                                 h = tonumber(string.format("%X",string.byte(c, 3))),
-                                w = tonumber(string.format("%X",string.byte(c, 4))),
+                                w = tonumber(string.format("%X",string.byte(c, 4))) - 1,
                                 d = tonumber(string.format("%X",string.byte(c, 5))),
                                 mo = tonumber(string.format("%X",string.byte(c, 6))),
                                 y = tonumber(string.format("%X",string.byte(c, 7)))

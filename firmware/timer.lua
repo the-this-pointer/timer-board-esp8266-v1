@@ -65,7 +65,7 @@ timer:alarm(20000, tmr.ALARM_AUTO, function()
         i2c.stop(id)
 
         if c then
-            wd = tonumber(string.format("%X",string.byte(c, 4))) or 0
+            wd = (tonumber(string.format("%X",string.byte(c, 4))) or 1) - 1
             hr = tonumber(string.format("%X",string.byte(c, 3))) or 0
             min = tonumber(string.format("%X",string.byte(c, 2))) or 0
             sec = tonumber(string.format("%X",string.byte(c, 1))) or 0
